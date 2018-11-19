@@ -7,7 +7,7 @@ function [X_norm, mu, sigma] = featureNormalize(X)
 
 % You need to set these values correctly
 X_norm = X;
-mu = zeros(1, size(X, 2));
+mu = zeros(1, size(X, 2)); % The size function gives number of columns of X here, so mu = (0, 0)
 sigma = zeros(1, size(X, 2));
 
 % ====================== YOUR CODE HERE ======================
@@ -24,10 +24,15 @@ sigma = zeros(1, size(X, 2));
 %               each feature. 
 %
 % Hint: You might find the 'mean' and 'std' functions useful.
-%       
 
+% Note we havent added the initial columns of 1s when this function is called so
+% we start normalising from first column
+for i = 1:size(X, 2),
+  mu(i) = mean(X(:, i));
+  sigma(i) = std(X(:, i));
+end;
 
-
+X_norm = (X_norm .- mu) ./ sigma; %. means element wise operation
 
 
 
