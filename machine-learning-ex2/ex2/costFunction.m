@@ -19,8 +19,10 @@ grad = zeros(size(theta));
 %
 % Note: grad should have the same dimensions as theta
 %
-
-
+h = sigmoid(X*theta); % The hypothesis
+% Vectorised implementation:
+J = 1/m * (-y' * log(h) - (1-y)' * log(1-h));
+grad = 1/m * X' * (h - y);
 
 
 
