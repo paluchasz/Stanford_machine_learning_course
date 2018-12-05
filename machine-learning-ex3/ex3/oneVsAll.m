@@ -51,8 +51,23 @@ X = [ones(m, 1) X];
 
 
 
+initial_theta = zeros(n + 1, 1); % this has size 401 x 1 which makes senses as
+% 400 fatures + theta_0
+     
+     % Set options for fminunc
+options = optimset('GradObj', 'on', 'MaxIter', 50);
 
-
+% num_labels = 10 in our case since we want to classify between 10 different digits
+for K = 1:num_labels,
+  
+  theta = fmincg (@(t)(lrCostFunction(t, X, y == K, lambda)), initial_theta, options);
+  % y == K is used so that for each different classifier we get y=1 (true) if
+  % the training example is the 'correct one' and y=0 (false) if the training example
+  % is for any of the other options - this is the basis of one vs all method!
+  all_theta(K,:) = theta'; 
+  %add each of the thetas to the matrix as a row (hence transpose)
+  
+end
 
 
 
