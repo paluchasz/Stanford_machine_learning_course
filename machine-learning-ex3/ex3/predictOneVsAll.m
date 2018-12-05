@@ -12,7 +12,7 @@ m = size(X, 1);
 num_labels = size(all_theta, 1);
 
 % You need to return the following variables correctly 
-p = zeros(size(X, 1), 1);
+p = zeros(m, 1);
 
 % Add ones to the X data matrix
 X = [ones(m, 1) X];
@@ -29,6 +29,21 @@ X = [ones(m, 1) X];
 %       are in rows, then, you can use max(A, [], 2) to obtain the max 
 %       for each row.
 %       
+
+% see my working out in the book but basically: all_theta is 10x401 and X is 
+% 5000 (m)x401 so doing all_theta*X' gives a matrix 10x5000. So each column corresponds
+% to different training example and each row to probability of that digit.
+predictions = sigmoid(all_theta * X');
+
+% We want the max probability from each column (predictions(:,i)), so looping 
+% through all training sets and finding the index of max probability which
+% corresponds to the digit prediction and adding to the prediction vector p: 
+for i = 1:m,
+  maximum = max(predictions(:,i));
+  prediction = find(predictions(:,i) == maximum);
+  p(i) = prediction;
+ end
+ 
 
 
 
