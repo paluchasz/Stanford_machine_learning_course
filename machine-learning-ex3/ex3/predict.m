@@ -8,7 +8,7 @@ m = size(X, 1);
 num_labels = size(Theta2, 1);
 
 % You need to return the following variables correctly 
-p = zeros(size(X, 1), 1);
+p = zeros(m, 1);
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Complete the following code to make predictions using
@@ -22,7 +22,28 @@ p = zeros(size(X, 1), 1);
 %
 
 
+% check my notebook for workings out!
 
+% Add ones to the X data matrix, this takes care of the bias in a_1/x
+X = [ones(m, 1) X];
+
+% now need to go through all training examples
+for i = 1:m,
+  % selecting a training example
+  x = X(i,:)';
+  z_2 = Theta1 * x;
+  a_2 = sigmoid(z_2);
+  %Need to add bias to a_2:
+  a_2 = [1; a_2];
+  z_3 = Theta2 * a_2;
+  h = sigmoid(z_3);
+  % h is now a 10x1 vector of probabilities, we need to take the maximum of 
+  % the probabilities for each training example and the index of the highest
+  % probability to p since that will correspond to the digit prediciton.
+  maximum = max(h); % finds the max
+  prediction = find(h == maximum); % finds the index
+  p(i) = prediction;
+end
 
 
 
