@@ -63,9 +63,61 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+% Part 1
+
+% Add ones to the X data matrix, this takes care of the bias in a_1/x
+X = [ones(m, 1) X];
+
+% Intialise J
+J = 0;
+
+% now need to go through all training examples and for each h(theta) work 
+% out the cost and add to J
+for i = 1:m,
+  % selecting a training example
+  x = X(i,:)';
+  
+  z_2 = Theta1 * x;
+  a_2 = sigmoid(z_2);
+  
+  %Need to add bias to a_2:
+  a_2 = [1; a_2];
+  z_3 = Theta2 * a_2;
+  h = sigmoid(z_3);
+  % h is now a 10x1 vector of probabilities
+  
+  % Also at the moment y is a mx1 vector, for each of its elements need to convert
+  % it to a 10D basis vector, e.g if y(i) = 1 then need (1,0,....0) and if y(i) = 2
+  % then need (0,1,0,....0)
+  y_output_layer = zeros(num_labels, 1);
+  y_output_layer(y(i)) = 1; 
+
+  J_for_one_example = 1/m * (-y_output_layer' * log(h) - (1 -y_output_layer)' * log(1 -h));
+  
+  J = J + J_for_one_example;
+end
 
 
+% Regularization terms for J. 
+regularization_term = 0;
 
+%Theta1: let i represent rows and j columns; note how we are starting j at 2 to 
+% ignore the first column of Theta which corresponds to the bias.
+for i = 1:size(Theta1, 1),
+  for j = 2:size(Theta1, 2),
+    regularization_term = regularization_term + lambda/(2*m) * Theta1(i,j)**2;
+  end
+end
+
+%Theta2:
+for i = 1:size(Theta2, 1),
+  for j = 2:size(Theta2, 2),
+    regularization_term = regularization_term + lambda/(2*m) * Theta2(i,j)**2;
+  end
+end
+
+% Regularized J:
+J = J + regularization_term;
 
 
 
