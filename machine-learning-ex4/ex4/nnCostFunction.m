@@ -72,11 +72,12 @@ X = [ones(m, 1) X];
 J = 0;
 
 % now need to go through all training examples and for each h(theta) work 
-% out the cost and add to J
+% out the cost and add to J. For each example we feedforward then backpropagate.
 for i = 1:m,
   % selecting a training example
   x = X(i,:)';
   a_1 = x;
+  
   
   %%% Feedforward part: %%%
   z_2 = Theta1 * x;
@@ -89,14 +90,15 @@ for i = 1:m,
   % h is now a 10x1 vector of probabilities
   
   % Also at the moment y is a mx1 vector, for each of its elements need to convert
-  % it to a 10D basis vector, e.g if y(i) = 1 then need (1,0,....0) and if y(i) = 2
-  % then need (0,1,0,....0)
+  % it to a num_labels dimensions basis vector, e.g if y(i) = 1 then need (1,0,....0) 
+  % and if y(i) = 2 then need (0,1,0,....0)
   y_output_layer = zeros(num_labels, 1);
   y_output_layer(y(i)) = 1; 
 
   J_for_one_example = 1/m * (-y_output_layer' * log(h) - (1 -y_output_layer)' * log(1 -h));
   
   J = J + J_for_one_example;
+  
   
   %%% Backpropagation part %%%
   delta_3 = h - y_output_layer;
@@ -108,11 +110,13 @@ for i = 1:m,
   % Keep accumulating the gradients 
   Theta1_grad = Theta1_grad + delta_2 * a_1';
   Theta2_grad = Theta2_grad + delta_3 * a_2';
+  
 end
 
 % The final step of computing the gradients
 Theta1_grad = 1/m * Theta1_grad;
 Theta2_grad = 1/m * Theta2_grad;
+
 
 % Regularization terms for J. 
 regularization_term = 0;
@@ -136,7 +140,15 @@ end
 J = J + regularization_term;
 
 
+% Regularization of gradient
+Theta1_reg = lambda/m * Theta1;
+Theta1_reg(:,1) = 0; % Since we do not want to regularize the first column (bias)
+Theta2_reg = lambda/m * Theta2;
+Theta2_reg(:,1) = 0;
 
+% Finally add the terms to get regularized gradient:
+Theta1_grad = Theta1_grad + Theta1_reg;
+Theta2_grad = Theta2_grad + Theta2_reg;
 
 
 
