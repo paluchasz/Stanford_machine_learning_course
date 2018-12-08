@@ -63,7 +63,7 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
-% Part 1
+
 
 % Add ones to the X data matrix, this takes care of the bias in a_1/x
 X = [ones(m, 1) X];
@@ -76,7 +76,9 @@ J = 0;
 for i = 1:m,
   % selecting a training example
   x = X(i,:)';
+  a_1 = x;
   
+  %%% Feedforward part: %%%
   z_2 = Theta1 * x;
   a_2 = sigmoid(z_2);
   
@@ -95,8 +97,22 @@ for i = 1:m,
   J_for_one_example = 1/m * (-y_output_layer' * log(h) - (1 -y_output_layer)' * log(1 -h));
   
   J = J + J_for_one_example;
+  
+  %%% Backpropagation part %%%
+  delta_3 = h - y_output_layer;
+  z_2 = [1; z_2]; % adding bias to z_2 so dimensions match below:
+  delta_2 = Theta2' * delta_3 .* sigmoidGradient(z_2);
+  
+  delta_2 = delta_2(2:end); %removing the bias error deta_0^(2)
+  
+  % Keep accumulating the gradients 
+  Theta1_grad = Theta1_grad + delta_2 * a_1';
+  Theta2_grad = Theta2_grad + delta_3 * a_2';
 end
 
+% The final step of computing the gradients
+Theta1_grad = 1/m * Theta1_grad;
+Theta2_grad = 1/m * Theta2_grad;
 
 % Regularization terms for J. 
 regularization_term = 0;
