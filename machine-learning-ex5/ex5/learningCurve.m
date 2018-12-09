@@ -53,9 +53,18 @@ error_val   = zeros(m, 1);
 
 % ---------------------- Sample Solution ----------------------
 
+for i = 1:m,
+  training_subset = X(1:i, :);
+  output_subset = y(1:i);
+  
+  % train the parameters with only that subset of training examples
+  theta = trainLinearReg(training_subset, output_subset, lambda);
 
-
-
+  % the error is just the unregularized J (hence last argument of lambda = 0): 
+  error_train(i) = linearRegCostFunction(training_subset, output_subset, theta, 0);
+  error_val(i) = linearRegCostFunction(Xval, yval, theta, 0);
+  
+end
 
 
 
