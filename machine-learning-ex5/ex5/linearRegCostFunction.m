@@ -19,11 +19,16 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+% Just the same as in week 1 or 2 so check explanations to that if forgot.
+
 regularization_term = lambda/(2*m) * (theta' * theta - theta(1)**2);
 
 J = 1/(2*m) * (X * theta - y)' * (X * theta - y) + regularization_term;
 
+reg_grad_term = lambda/m * theta;
+reg_grad_term(1) = 0; % since we don't want to regularize the bias
 
+grad = 1/m * X' * (X * theta - y) + reg_grad_term;
 
 
 
@@ -32,6 +37,5 @@ J = 1/(2*m) * (X * theta - y)' * (X * theta - y) + regularization_term;
 
 % =========================================================================
 
-grad = grad(:);
 
 end
