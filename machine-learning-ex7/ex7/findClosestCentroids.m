@@ -21,8 +21,36 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
+m = size(X,1);
 
+for i = 1:m,
+  
+  % Find coordinates of data point:
+  x = X(i, :);
+  
+  % Initialize an array which will store distances to each cluster
+  distances = [];
+  
+  for j = 1:K,
+    % find coordinates of cluster
+    c = centroids(j, :);
+    
+    distance = (x-c) * (x - c)';
+    % I transpose the second one because x and c are row vectors
 
+    distances = [distances; distance];
+    % Append to distances for each centroid
+  end
+  
+  min_distance = min(distances); % find minimum distance
+  cluster_id = find(distances == min_distance); % and which centroid that corresponds to
+  idx(i) = cluster_id(1); % in case there is more than one optimum distance just pick the first
+  
+end
+
+   
+    
+    
 
 
 
