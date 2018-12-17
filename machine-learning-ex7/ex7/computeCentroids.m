@@ -26,8 +26,19 @@ centroids = zeros(K, n);
 % Note: You can use a for-loop over the centroids to compute this.
 %
 
+for i = 1:K,
+  
+  sel = find(idx == i); 
+  % selection of all indices for each centroid, if I had [idx == i] this would give 
+  % a binary vector with 1 if that particular training example was added to this centroid
+  % so find, finds the indices of these 1s which tells me which examples to average
+  
+  centroids(i, :) = mean(X(sel, :));
+  % X is a matrix so compute the mean for each column and return them in a row vector.
+  % Finding the mean of some vectors is the same as finding the mean of the individual 
+  % components for all components!
 
-
+end
 
 
 
