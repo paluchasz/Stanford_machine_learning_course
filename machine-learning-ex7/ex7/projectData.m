@@ -18,7 +18,23 @@ Z = zeros(size(X, 1), K);
 %                    projection_k = x' * U(:, k);
 %
 
+U_reduce = U(:, 1:K);
+m = size(X, 1);
 
+% one approach:
+#{
+for i = 1:m,
+  
+  x = X(i, :)';
+  z = U_reduce' * x;
+  Z(i,:) = z';
+  
+end
+#}
+
+% A vectorized implementation! 
+Z = X * U_reduce;
+% Since Z is mxk X is mxn and U_reduce is nxk, check notes to clarify
 
 
 % =============================================================
