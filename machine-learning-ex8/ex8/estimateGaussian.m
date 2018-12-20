@@ -22,7 +22,15 @@ sigma2 = zeros(n, 1);
 %
 
 
+% sum() sums each column of X, then if we transpose we get a vector equivalent to
+% summing all vectors x^(i).
+mu = 1/m * sum(X)';  
 
+% Once we transpose X each column is an x^(i). Hence the ith column of X' .- mu 
+% corresponds to x^i - mu, we then square each term of the matrix in turn and finally
+% sum over each row 
+temp = (X' .- mu) .^2;
+sigma2 = 1/m * sum(temp, 2); % the 2 indicates we are summing over rows not columns
 
 
 
