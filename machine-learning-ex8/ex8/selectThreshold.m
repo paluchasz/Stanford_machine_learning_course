@@ -23,8 +23,23 @@ for epsilon = min(pval):stepsize:max(pval)
     % Note: You can use predictions = (pval < epsilon) to get a binary vector
     %       of 0's and 1's of the outlier predictions
 
-
-
+    % This vector will predict 1 if the probability is < epsilon (meaning an
+    % (anomalous example) and 0 if probability > epsilon (meaning a normal example)
+    predictions = pval < epsilon;
+    
+    % Look at 2x2 table in Week 6, handling skewed data for a reminder of the following:
+    
+    % True positives (number of occurances when predicted class = 1 and actual class = 1):
+    tp = sum((predictions == 1) & (yval == 1));
+    % False positives (occurances where predicted class = 1 and actual class = 0):
+    fp = sum((predictions == 1) & (yval == 0));
+    % False negatives (occurances where predicted = 0 and actual = 1):
+    fn = sum((predictions == 0) & (yval == 1));
+    
+    precision = tp / (tp + fp);
+    recall = tp / (tp + fn);
+    
+    F1 = 2 * precision * recall / (precision + recall);
 
 
 
