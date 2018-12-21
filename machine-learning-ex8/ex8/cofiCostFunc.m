@@ -81,6 +81,10 @@ X_squared = X .^2;
 reg_term = lambda / 2 * ( sum(sum(Theta_squared)) + sum(sum(X_squared)) );
 J = J + reg_term;
 
+% Regularization of gradients:
+X_grad = X_grad + lambda * X;
+Theta_grad = Theta_grad + lambda * Theta;
+
 
 
 
