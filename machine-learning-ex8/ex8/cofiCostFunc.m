@@ -41,7 +41,9 @@ Theta_grad = zeros(size(Theta));
 %
 
 
-
+% The predictions can be written as X' * Theta. Hence argument inside the sum of J:
+arg = ((X * Theta') .* R - Y .* R) .^2; 
+J = 1/2 * sum(sum(arg));
 
 
 
