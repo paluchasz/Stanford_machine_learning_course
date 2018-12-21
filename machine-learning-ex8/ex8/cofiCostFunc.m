@@ -40,16 +40,46 @@ Theta_grad = zeros(size(Theta));
 %                     partial derivatives w.r.t. to each element of Theta
 %
 
+% See notes for this!
 
 % The predictions can be written as X' * Theta. Hence argument inside the sum of J:
 arg = ((X * Theta') .* R - Y .* R) .^2; 
 J = 1/2 * sum(sum(arg));
 
+% Finding x gradients:
+for i = 1:num_movies,
+  
+  % List of all users that rated move i:
+  idx = find(R(i,:) == 1);
+  
+  % Get matrices Theta, Y with only the set of users that have rated movie i:
+  Theta_temp = Theta(idx, :);
+  Y_temp = Y(i, idx);
 
+  % Find the ith gradient vector:
+  X_grad(i, :) = (X(i,:) * Theta_temp' - Y_temp) * Theta_temp;
 
+end
 
+% Finding theta gradients:
+for j = 1:num_users,
+  
+  % List of all movies rated by user j:
+  idx = find(R(:,j) == 1);
+  
+  X_temp = X(idx, :);
+  Y_temp = Y(idx, j);
+  
+  Theta_grad(j, :) = (X_temp * Theta(j, :)' - Y_temp)' * X_temp;
+  
+end
 
+% Regularization of J:
+Theta_squared = Theta .^2;
+X_squared = X .^2;
 
+reg_term = lambda / 2 * ( sum(sum(Theta_squared)) + sum(sum(X_squared)) );
+J = J + reg_term;
 
 
 
